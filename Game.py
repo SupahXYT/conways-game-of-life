@@ -1,35 +1,31 @@
-def check(buf, grid, row, col):
-    neighbors = buf;
-    if(grid[row+1][col]):
-        neighbors += 1
-    if(grid[row-1][col]):
-        neighbors += 1
-    if(grid[row][col+1]):
-        neighbors += 1
-    if(grid[row][col-1]):
-        neighbors += 1
-
-    ## Check corners 
-    if(grid[row+1][col+1]):
-        neighbors += 1
-    if(grid[row+1][col-1]):
-        neighbors += 1
-    if(grid[row-1][col+1]):
-        neighbors += 1
-    if(grid[row-1][col-1]):
-        neighbors += 1
-
-    return neighbors
 
 def neighbors(grid, row, col):
     neighbors = 0
 
-    if(row != 0 and row < len(grid) - 2 and col != 0 and col < 39):
-        neighbors = check(neighbors, grid, row, col)
-        
+    if(row != 0 and row < len(grid) - 2 and col != 0 and col < len(grid[row]) - 1):
+        ## Check adjacent
+        if(grid[row+1][col]):
+            neighbors += 1
+        if(grid[row-1][col]):
+            neighbors += 1
+        if(grid[row][col+1]):
+            neighbors += 1
+        if(grid[row][col-1]):
+            neighbors += 1
+
+        ## Check corners 
+        if(grid[row+1][col+1]):
+            neighbors += 1
+        if(grid[row+1][col-1]):
+            neighbors += 1
+        if(grid[row-1][col+1]):
+            neighbors += 1
+        if(grid[row-1][col-1]):
+            neighbors += 1
+       
     return neighbors
 
-class Game:
+class game:
 
     def __init__(self, width, height):
         self.steps = 0

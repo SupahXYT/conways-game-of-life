@@ -1,5 +1,6 @@
 import gi
 import Game
+from math import ceil, floor
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, GObject
@@ -13,10 +14,10 @@ class Display(Gtk.Window):
 
         self.origin_x, self.origin_y = (0, 0)
         self.init_x, self.init_y = (0, 0)
-        self.velx, self.vely = (0, 0)
-        self.scale = 4
-        self.speed = 5
+        self.scale = 6
+        self.speed = 3
         self.button = 1
+        self.run = False
 
         box = Gtk.EventBox()
         box.add_events(Gdk.EventMask.BUTTON_MOTION_MASK)
@@ -26,7 +27,7 @@ class Display(Gtk.Window):
         box.connect("motion-notify-event", self.on_motion)
         box.connect("scroll-event", self.on_scroll)
 
-        self.game = Game.Game(50, 50)
+        self.game = Game.game(50, 50)
         self.count = 0
 
         frame = Gtk.Frame(label="John Conway's Game of Life")
@@ -47,6 +48,7 @@ class Display(Gtk.Window):
             self.init_x = event.x
             self.init_y = event.y
 
+
     def on_scroll(self, widget, event):
         if(event.direction == Gdk.ScrollDirection.UP):
             self.scale *= 1.1
@@ -57,6 +59,13 @@ class Display(Gtk.Window):
         self.button = event.button 
         self.init_x = event.x
         self.init_y = event.y
+
+        width = 8*self.scale
+
+        if(event.button == 1):
+            x = int((event.x - self.origin_x)/width)
+            y = int((event.y - self.origin_y)/width)
+            print(f'{x}, {y}')
 
     def draw(self, da, ctx):
 
@@ -70,11 +79,11 @@ class Display(Gtk.Window):
                     ctx.set_source_rgb(.9, .9, .9)
                     ctx.fill_preserve()
                     ctx.set_source_rgb(0.6, 0.6, 0.6)
-                    ctx.set_line_width(self.scale*2)
+                    ctx.set_line_width(self.scale*1)
                     ctx.stroke()
                 else:
                     ctx.set_source_rgb(0.6, 0.6, 0.6)
-                    ctx.set_line_width(self.scale*2)
+                    ctx.set_line_width(self.scale*1)
                     ctx.stroke()
 
         return True
@@ -89,5 +98,6 @@ class Display(Gtk.Window):
 win = Display()
 win.connect("destroy", Gtk.main_quit)
 win.show_all()
+
 Gtk.main()
 
