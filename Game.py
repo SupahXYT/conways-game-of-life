@@ -7,28 +7,29 @@ class game:
 
     @staticmethod
     def neighbors(grid, row, col):
+
         neighbors = 0
+        w, h = (len(grid), len(grid[row]))
 
-        if(row != 0 and row < len(grid) - 1 and col != 0 and col < len(grid[row]) - 1):
-            ## Check adjacent
-            if(grid[row+1][col]):
-                neighbors += 1
-            if(grid[row-1][col]):
-                neighbors += 1
-            if(grid[row][col+1]):
-                neighbors += 1
-            if(grid[row][col-1]):
-                neighbors += 1
+        ## Check adjacent
+        if(grid[(row+1) % w][col % h]):
+            neighbors += 1
+        if(grid[(row-1) % w][col % h]):
+            neighbors += 1
+        if(grid[row % w][(col+1) % h]):
+            neighbors += 1
+        if(grid[row % w][(col-1) % h]):
+            neighbors += 1
 
-            ## Check corners 
-            if(grid[row+1][col+1]):
-                neighbors += 1
-            if(grid[row+1][col-1]):
-                neighbors += 1
-            if(grid[row-1][col+1]):
-                neighbors += 1
-            if(grid[row-1][col-1]):
-                neighbors += 1
+        ## Check corners 
+        if(grid[(row+1) % w][(col+1) % h]):
+            neighbors += 1
+        if(grid[(row+1) % w][(col-1) % h]):
+            neighbors += 1
+        if(grid[(row-1) % w][(col+1) % h]):
+            neighbors += 1
+        if(grid[(row-1) % w][(col-1) % h]):
+            neighbors += 1
            
         return neighbors
 
@@ -66,7 +67,6 @@ class game:
                     pop += 1
 
         return pop
-
 
     def force(self, row, col):
         self.grid[row][col] = not self.grid[row][col]

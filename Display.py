@@ -29,7 +29,7 @@ class Display(Gtk.Window):
         self.add_events(Gdk.EventMask.KEY_PRESS_MASK)
         self.connect("key-press-event", self.on_key_press)
 
-        self.game = Game.game(20, 20)
+        self.game = Game.game(50, 8)
         self.count = 0
 
         self.drawingarea = Gtk.DrawingArea()
