@@ -1,54 +1,47 @@
 
-def neighbors(grid, row, col):
-    neighbors = 0
-
-    if(row != 0 and row < len(grid) - 2 and col != 0 and col < len(grid[row]) - 1):
-        ## Check adjacent
-        if(grid[row+1][col]):
-            neighbors += 1
-        if(grid[row-1][col]):
-            neighbors += 1
-        if(grid[row][col+1]):
-            neighbors += 1
-        if(grid[row][col-1]):
-            neighbors += 1
-
-        ## Check corners 
-        if(grid[row+1][col+1]):
-            neighbors += 1
-        if(grid[row+1][col-1]):
-            neighbors += 1
-        if(grid[row-1][col+1]):
-            neighbors += 1
-        if(grid[row-1][col-1]):
-            neighbors += 1
-       
-    return neighbors
-
 class game:
 
     def __init__(self, width, height):
         self.steps = 0
         self.grid = [[False for i in range(height)] for j in range(width)]
-        self.grid[20][20] = True
-        self.grid[21][20] = True
-        self.grid[22][20] = True
-        self.grid[21][19] = True
-        self.grid[21][18] = True
-        self.grid[21][17] = True
-        self.grid[21][16] = True
-        print(len(self.grid[0]))
+
+    @staticmethod
+    def neighbors(grid, row, col):
+        neighbors = 0
+
+        if(row != 0 and row < len(grid) - 1 and col != 0 and col < len(grid[row]) - 1):
+            ## Check adjacent
+            if(grid[row+1][col]):
+                neighbors += 1
+            if(grid[row-1][col]):
+                neighbors += 1
+            if(grid[row][col+1]):
+                neighbors += 1
+            if(grid[row][col-1]):
+                neighbors += 1
+
+            ## Check corners 
+            if(grid[row+1][col+1]):
+                neighbors += 1
+            if(grid[row+1][col-1]):
+                neighbors += 1
+            if(grid[row-1][col+1]):
+                neighbors += 1
+            if(grid[row-1][col-1]):
+                neighbors += 1
+           
+        return neighbors
 
     def act(self, snapshot, row, col):
         if(snapshot[row][col]): # if alive
-            if(neighbors(snapshot, row, col) < 2):
+            if(self.neighbors(snapshot, row, col) < 2):
                 self.grid[row][col] = False
-            elif(neighbors(snapshot, row, col) < 4):
+            elif(self.neighbors(snapshot, row, col) < 4):
                 pass
             else:
                 self.grid[row][col] = False
         else: # if dead
-            if(neighbors(snapshot, row, col) == 3):
+            if(self.neighbors(snapshot, row, col) == 3):
                 self.grid[row][col] = True
 
     def step(self):
@@ -65,4 +58,15 @@ class game:
     def getgrid(self):
         return self.grid
 
+    def get_pop(self):
+        pop = 0
+        for i in range(0, len(self.grid)):
+            for j in range(0, len(self.grid[i])):
+                if(self.grid[i][j]):
+                    pop += 1
 
+        return pop
+
+
+    def force(self, row, col):
+        self.grid[row][col] = not self.grid[row][col]
