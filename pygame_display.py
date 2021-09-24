@@ -78,6 +78,8 @@ class Display():
         if(self.button == 3):
             self.ox += event.rel[0]
             self.oy += event.rel[1]
+        else:
+            self.update_display = False
 
     def draw(self):
         grid = self.game.grid
