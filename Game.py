@@ -4,9 +4,6 @@ class game:
     def __init__(self, width, height):
         self.steps = 0
         self.grid = [[False for i in range(height)] for j in range(width)]
-        self.grid[20][20] = True
-        self.grid[21][20] = True
-        self.grid[22][20] = True
 
     @staticmethod
     def neighbors(grid, row, col):

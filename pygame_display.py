@@ -6,22 +6,22 @@ col_border = (153, 153, 153)
 col_fill = (229, 229, 229)
 
 class Display():
-    def __init__(self):
+    def __init__(self, width, height):
         pygame.init()
         self.display = pygame.display.set_mode((400, 400), pygame.RESIZABLE)
         self.display.fill(col_bg)
-        self.game = Game.game(25, 25)
+        self.game = Game.game(width, height)
         self.paused = True
         self.scale = 1
         self.ox, self.oy = (0, 0)
         self.button = 1
-        self.to_flip = True 
+        self.update_display = True 
         pygame.display.flip()
 
     def main(self):
         running = True
         while running:
-            self.to_flip = True
+            self.update_display = True
             events = pygame.event.get()
             if(len(events) > 0):
                 for event in events:
@@ -38,14 +38,14 @@ class Display():
                     if event.type == MOUSEMOTION:
                         self.on_motion(event)
             else:
-                self.to_flip = False
+                self.update_display = False
 
             if(not self.paused):
                 self.game.step()
-                self.to_flip = True
+                self.update_display= True
 
-            self.draw()
-            if(self.to_flip):
+            if(self.update_display):
+                self.draw()
                 pygame.display.flip()
             pygame.time.wait(5)
 
@@ -98,5 +98,5 @@ class Display():
                         self.oy + round(col*8*scale), round(scale*8), round(scale*8)), round(scale))
 
    
-d = Display()
+d = Display(10, 10)
 d.main()
