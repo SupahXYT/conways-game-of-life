@@ -10,34 +10,43 @@ class Display():
         pygame.init()
         self.display = pygame.display.set_mode((400, 400), pygame.RESIZABLE)
         self.display.fill(col_bg)
-        self.game = Game.game(100, 100)
+        self.game = Game.game(25, 25)
         self.paused = True
         self.scale = 1
         self.ox, self.oy = (0, 0)
         self.button = 1
+        self.to_flip = True 
         pygame.display.flip()
 
     def main(self):
         running = True
         while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                elif event.type == KEYDOWN:
-                    self.on_key_press(event)
-                elif event.type == MOUSEWHEEL:
-                    self.on_scroll(event)
-                elif event.type == MOUSEBUTTONDOWN:
-                    self.on_mouse_down(event)
-                elif event.type == MOUSEBUTTONUP:
-                    self.on_mouse_up()
-                if event.type == MOUSEMOTION:
-                    self.on_motion(event)
+            self.to_flip = True
+            events = pygame.event.get()
+            if(len(events) > 0):
+                for event in events:
+                    if event.type == pygame.QUIT:
+                        running = False
+                    elif event.type == KEYDOWN:
+                        self.on_key_press(event)
+                    elif event.type == MOUSEWHEEL:
+                        self.on_scroll(event)
+                    elif event.type == MOUSEBUTTONDOWN:
+                        self.on_mouse_down(event)
+                    elif event.type == MOUSEBUTTONUP:
+                        self.on_mouse_up()
+                    if event.type == MOUSEMOTION:
+                        self.on_motion(event)
+            else:
+                self.to_flip = False
 
-            self.draw()
             if(not self.paused):
                 self.game.step()
-            pygame.display.flip()
+                self.to_flip = True
+
+            self.draw()
+            if(self.to_flip):
+                pygame.display.flip()
             pygame.time.wait(5)
 
         pygame.quit()        
