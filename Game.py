@@ -4,6 +4,9 @@ class game:
     def __init__(self, width, height):
         self.steps = 0
         self.grid = [[False for i in range(height)] for j in range(width)]
+        self.grid[20][20] = True
+        self.grid[21][20] = True
+        self.grid[22][20] = True
 
     @staticmethod
     def neighbors(grid, row, col):
@@ -49,9 +52,9 @@ class game:
         # snapshot = grid does NOT work
         snapshot = [row[:] for row in self.grid]
 
-        for i in range(0, len(self.grid)):
-            for j in range(0, len(self.grid[i])):
-                self.act(snapshot, i, j)
+        for row in range(0, len(self.grid)):
+            for col in range(0, len(self.grid[row])):
+                self.act(snapshot, row, col)
 
         print(f'step: {self.steps}')
         self.steps += 1
@@ -61,9 +64,9 @@ class game:
 
     def get_pop(self):
         pop = 0
-        for i in range(0, len(self.grid)):
-            for j in range(0, len(self.grid[i])):
-                if(self.grid[i][j]):
+        for row in range(0, len(self.grid)):
+            for col in range(0, len(self.grid[row])):
+                if(self.grid[row][col]):
                     pop += 1
 
         return pop
