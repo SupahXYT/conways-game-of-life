@@ -9,6 +9,7 @@ class Display():
     def __init__(self, width, height):
         pygame.init()
         self.display = pygame.display.set_mode((400, 400), pygame.RESIZABLE)
+        self.width, self.height = (width, height)
         self.display.fill(col_bg)
         self.game = Game.game(width, height)
         self.paused = True
@@ -19,6 +20,8 @@ class Display():
         pygame.display.flip()
 
     def main(self):
+        self.draw()
+        pygame.display.flip()
         running = True
         while running:
             self.update_display = True
@@ -72,7 +75,8 @@ class Display():
         if event.button == 1:
             row = int((event.pos[0] - self.ox)/(8*self.scale))
             col = int((event.pos[1] - self.oy)/(8*self.scale))
-            self.game.force(row, col)
+            if(row < self.width and col < self.height):
+                self.game.force(row, col)
 
     def on_motion(self, event):
         if(self.button == 3):
@@ -85,8 +89,8 @@ class Display():
         grid = self.game.grid
         scale = self.scale
         self.display.fill(col_bg)
-        for row in range(0, len(grid)):
-            for col in range(0, len(grid[row])):
+        for row in range(0, self.width):
+            for col in range(0, self.height):
                 # smh pygame doesn't support floating point values for drawing
                 if(grid[row][col]):
                     pygame.draw.rect(self.display, col_fill, pygame.Rect(self.ox + round(row*8*scale), 
@@ -100,5 +104,5 @@ class Display():
                         self.oy + round(col*8*scale), round(scale*8), round(scale*8)), round(scale))
 
    
-d = Display(10, 10)
+d = Display(50, 8)
 d.main()
