@@ -11,7 +11,7 @@ class Display():
         self.display = pygame.display.set_mode((400, 400), pygame.RESIZABLE)
         self.width, self.height = (width, height)
         self.display.fill(col_bg)
-        self.game = Game.game(width, height)
+        self.game = Game.game(width, height, Game.conway)
         self.paused = True
         self.scale = 1
         self.ox, self.oy = (0, 0)
@@ -50,7 +50,7 @@ class Display():
             if(self.update_display):
                 self.draw()
                 pygame.display.flip()
-            pygame.time.wait(5)
+            pygame.time.wait(10)
 
         pygame.quit()        
 
@@ -104,5 +104,5 @@ class Display():
                         self.oy + round(col*8*scale), round(scale*8), round(scale*8)), round(scale))
 
    
-d = Display(50, 8)
+d = Display(50, 50)
 d.main()

@@ -1,9 +1,28 @@
+def conway(self, snapshot, row, col):
+    if(snapshot[row][col]): # if alive
+        if(self.neighbors(snapshot, row, col) < 2):
+            self.grid[row][col] = False
+        elif(self.neighbors(snapshot, row, col) < 4):
+            pass
+        else:
+            self.grid[row][col] = False
+    else: # if dead
+        if(self.neighbors(snapshot, row, col) == 3):
+            self.grid[row][col] = True
+
+def custom(self, snapshot, row, col):
+    if(snapshot[row][col]): # if alive
+        pass
+    else: # if dead
+        if(self.neighbors(snapshot, row, col) >= 1):
+            self.grid[row][col] = True
 
 class game:
 
-    def __init__(self, width, height):
+    def __init__(self, width, height, rule):
         self.steps = 0
         self.grid = [[False for i in range(height)] for j in range(width)]
+        self.act = rule
 
     @staticmethod
     def neighbors(grid, row, col):
@@ -33,17 +52,17 @@ class game:
            
         return neighbors
 
-    def act(self, snapshot, row, col):
-        if(snapshot[row][col]): # if alive
-            if(self.neighbors(snapshot, row, col) < 2):
-                self.grid[row][col] = False
-            elif(self.neighbors(snapshot, row, col) < 4):
-                pass
-            else:
-                self.grid[row][col] = False
-        else: # if dead
-            if(self.neighbors(snapshot, row, col) == 3):
-                self.grid[row][col] = True
+#     def act(self, snapshot, row, col):
+#         if(snapshot[row][col]): # if alive
+#             if(self.neighbors(snapshot, row, col) < 2):
+#                 self.grid[row][col] = False
+#             elif(self.neighbors(snapshot, row, col) < 4):
+#                 pass
+#             else:
+#                 self.grid[row][col] = False
+#         else: # if dead
+#             if(self.neighbors(snapshot, row, col) == 3):
+#                 self.grid[row][col] = True
 
     def step(self):
         # snapshot = grid does NOT work
@@ -51,7 +70,7 @@ class game:
 
         for row in range(0, len(self.grid)):
             for col in range(0, len(self.grid[row])):
-                self.act(snapshot, row, col)
+                self.act(self, snapshot, row, col)
 
         print(f'step: {self.steps}')
         self.steps += 1
