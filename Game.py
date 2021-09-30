@@ -1,20 +1,11 @@
 def conway(self, snapshot, row, col):
-    if(snapshot[row][col]): # if alive
-        if(self.neighbors(snapshot, row, col) < 2):
-            self.grid[row][col] = False
-        elif(self.neighbors(snapshot, row, col) < 4):
-            pass
-        else:
-            self.grid[row][col] = False
-    else: # if dead
-        if(self.neighbors(snapshot, row, col) == 3):
-            self.grid[row][col] = True
+    neighbors = self.neighbors(snapshot, row, col)
 
-def custom(self, snapshot, row, col):
     if(snapshot[row][col]): # if alive
-        pass
+        if(neighbors < 2 or neighbors > 3):
+            self.grid[row][col] = False
     else: # if dead
-        if(self.neighbors(snapshot, row, col) >= 1):
+        if(neighbors == 3):
             self.grid[row][col] = True
 
 class game:
@@ -52,17 +43,23 @@ class game:
            
         return neighbors
 
-#     def act(self, snapshot, row, col):
-#         if(snapshot[row][col]): # if alive
-#             if(self.neighbors(snapshot, row, col) < 2):
-#                 self.grid[row][col] = False
-#             elif(self.neighbors(snapshot, row, col) < 4):
-#                 pass
-#             else:
-#                 self.grid[row][col] = False
-#         else: # if dead
-#             if(self.neighbors(snapshot, row, col) == 3):
-#                 self.grid[row][col] = True
+    @staticmethod
+    def adjneighbors(grid, row, col): 
+
+        neighbors = 0
+        w, h = (len(grid), len(grid[row]))
+
+        ## Check adjacent
+        if(grid[(row+1) % w][col % h]):
+            neighbors += 1
+        if(grid[(row-1) % w][col % h]):
+            neighbors += 1
+        if(grid[row % w][(col+1) % h]):
+            neighbors += 1
+        if(grid[row % w][(col-1) % h]):
+            neighbors += 1
+
+        return neighbors
 
     def step(self):
         # snapshot = grid does NOT work
@@ -89,3 +86,33 @@ class game:
 
     def force(self, row, col):
         self.grid[row][col] = not self.grid[row][col]
+
+class boundgame(game):
+    def __init__(self, width, height, lower, upper):
+        self.lower = lower
+        self.upper = upper
+        rule = self.rule
+        super().__init__(width, height, rule)
+
+    def rule(self, snapshot, row, col):
+        if(snapshot[row][col]): # if alive
+            if(self.neighbors(snapshot, row, col) < self.lower):
+                self.grid[row][col] = False
+            elif(self.neighbors(snapshot, row, col) < self.upper):
+                pass
+            else:
+                self.grid[row][col] = False
+        else: # if dead
+            if(self.neighbors(snapshot, row, col) == 3):
+                self.grid[row][col] = True
+    
+    def neighbors(self, grid, row, col):
+        super().neighbors(grid, row, col)
+
+    def step(self):
+        super().step()
+
+    def force(self, row, col):
+        super().force(row, col)
+
+
