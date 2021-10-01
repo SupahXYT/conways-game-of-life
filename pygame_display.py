@@ -11,7 +11,7 @@ class Display():
         self.display = pygame.display.set_mode((400, 400), pygame.RESIZABLE)
         self.width, self.height = (width, height)
         self.display.fill(col_bg)
-        self.game = Game.game(width, height, Game.conway)
+        self.game = Game.game(width, height, Game.act(4, 6))
         self.paused = True
         self.scale = 1
         self.ox, self.oy = (0, 0)

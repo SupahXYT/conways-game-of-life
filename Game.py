@@ -10,10 +10,10 @@ def conway(self, snapshot, row, col):
 
 class game:
 
-    def __init__(self, width, height, rule):
+    def __init__(self, width, height, act):
         self.steps = 0
         self.grid = [[False for i in range(height)] for j in range(width)]
-        self.act = rule
+        self.act = act
 
     @staticmethod
     def neighbors(grid, row, col):
@@ -67,7 +67,7 @@ class game:
 
         for row in range(0, len(self.grid)):
             for col in range(0, len(self.grid[row])):
-                self.act(self, snapshot, row, col)
+                self.grid[row][col] = self.act(snapshot, row, col)
 
         print(f'step: {self.steps}')
         self.steps += 1
@@ -87,32 +87,30 @@ class game:
     def force(self, row, col):
         self.grid[row][col] = not self.grid[row][col]
 
-class boundgame(game):
-    def __init__(self, width, height, lower, upper):
+class act():
+    def __init__(self, lower, upper):
         self.lower = lower
         self.upper = upper
-        rule = self.rule
-        super().__init__(width, height, rule)
 
-    def rule(self, snapshot, row, col):
+#     def __call__(self, snapshot, row, col):
+#         neighbors = game.neighbors(snapshot, row, col)
+
+        # if(snapshot[row][col]): # if alive
+        #     if(neighbors < self.lower or neighbors > self.upper):
+        #         return False
+        # else: # if dead
+        #     if(neighbors == 3):
+        #         return True
+
+    def __call__(self, snapshot, row, col):
+        neighbors = game.neighbors(snapshot, row, col)
         if(snapshot[row][col]): # if alive
-            if(self.neighbors(snapshot, row, col) < self.lower):
-                self.grid[row][col] = False
-            elif(self.neighbors(snapshot, row, col) < self.upper):
-                pass
+            if(neighbors < self.lower):
+                return False
+            elif(neighbors < self.upper):
+                return snapshot[row][col]
             else:
-                self.grid[row][col] = False
+                return False
         else: # if dead
-            if(self.neighbors(snapshot, row, col) == 3):
-                self.grid[row][col] = True
-    
-    def neighbors(self, grid, row, col):
-        super().neighbors(grid, row, col)
-
-    def step(self):
-        super().step()
-
-    def force(self, row, col):
-        super().force(row, col)
-
-
+            if(neighbors == self.upper - self.lower + 1):
+                return True
